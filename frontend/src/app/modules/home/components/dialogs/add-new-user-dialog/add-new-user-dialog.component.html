@@ -1,0 +1,138 @@
+@if (isOpen()) {
+  <div class="dialog-overlay" (click)="close()">
+    <div class="dialog-container" (click)="$event.stopPropagation()">
+      <div class="dialog-header">
+        <h2>Add New User</h2>
+        <button class="close-btn" (click)="close()" aria-label="Close dialog">
+          X
+        </button>
+      </div>
+
+      <div class="dialog-body">
+        <form (ngSubmit)="onSubmit()">
+          <!-- Personal Information -->
+          <div class="form-group">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input
+              type="text"
+              id="firstName"
+              [value]="firstName()"
+              #firstNameElement
+              (input)="firstName.set(firstNameElement.value)"
+              placeholder="Enter first name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name <span class="required">*</span></label>
+            <input
+              type="text"
+              id="lastName"
+              [value]="lastName()"
+              #lastNameInput
+              (input)="lastName.set(lastNameInput.value)"
+              placeholder="Enter last name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              [value]="dateOfBirth()"
+              #dobInput
+              (input)="dateOfBirth.set(dobInput.value)"
+              [max]="maxDate()"
+              [class.invalid]="dateOfBirth() !== '' && !isDateOfBirthValid()"
+            />
+            @if (dateOfBirth() !== '' && !isDateOfBirthValid()) {
+              <span class="error-message">Date of birth cannot be in the future</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="street">Street Address <span class="required">*</span></label>
+            <input
+              type="text"
+              id="street"
+              [value]="street()"
+              #streetInput
+              (input)="street.set(streetInput.value)"
+              placeholder="123 Main St"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apt">Apt / Suite (Optional)</label>
+            <input
+              type="text"
+              id="apt"
+              [value]="apt()"
+              #aptInput
+              (input)="apt.set(aptInput.value)"
+              placeholder="Apt 4B"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City <span class="required">*</span></label>
+              <input
+                type="text"
+                id="city"
+                [value]="city()"
+                #cityInput
+                (input)="city.set(cityInput.value)"
+                placeholder="City"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="state">State <span class="required">*</span></label>
+              <input
+                type="text"
+                id="state"
+                [value]="state()"
+                #stateInput
+                (input)="state.set(stateInput.value)"
+                placeholder="CA"
+                maxlength="2"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="zipCode">Zip Code <span class="required">*</span></label>
+              <input
+                type="text"
+                id="zipCode"
+                [value]="zipCode()"
+                #zipInput
+                (input)="zipCode.set(zipInput.value)"
+                placeholder="12345"
+                maxlength="5"
+                pattern="\d{5}"
+                [class.invalid]="zipCode() !== '' && !isZipCodeValid()"
+              />
+              @if (zipCode() !== '' && !isZipCodeValid()) {
+                <span class="error-message">Zip code must be exactly 5 digits</span>
+              }
+            </div>
+          </div>
+
+          <div class="dialog-footer">
+            <button type="button" class="btn btn-secondary" (click)="close()">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!isFormValid()"
+            >
+              Add User
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
