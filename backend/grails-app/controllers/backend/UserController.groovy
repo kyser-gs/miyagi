@@ -17,18 +17,6 @@ class UserController {
         }
     }
 
-    @Transactional
-    def delete(Long id) {
-        def user = User.get(id)
-        if (user) {
-            user.delete()
-            render([message: 'User deleted'] as JSON)
-        } else {
-            response.status = 404
-            render([message: 'User not found'] as JSON)
-        }
-    }
-
     def list() {
         def users = User.list()
         render(users as JSON)

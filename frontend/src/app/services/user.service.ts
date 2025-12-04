@@ -40,8 +40,4 @@ export class UserService {
   get(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/show/${id}`);
   }
-
-  delete(id: number): Observable<UserResponse> {
-    return this.http.delete<UserResponse>(`${this.apiUrl}/delete/${id}`);
-  }
 }
