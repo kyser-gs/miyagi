@@ -1,6 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {UserResponse, UserService} from '../../../../../services/user.service';
 
 @Component({
   selector: 'add-new-user-dialog',
@@ -9,6 +10,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './add-new-user-dialog.component.scss'
 })
 export class AddNewUserDialogComponent {
+  private userService: UserService = inject(UserService);
+
   // Form data using signals
   firstName = signal('');
   lastName = signal('');
@@ -80,21 +83,26 @@ export class AddNewUserDialogComponent {
       firstName: this.firstName(),
       lastName: this.lastName(),
       dateOfBirth: this.dateOfBirth(),
-      address: {
-        street: this.street(),
-        apt: this.apt(),
-        city: this.city(),
-        state: this.state(),
-        zipCode: this.zipCode()
-      }
+      street: this.street(),
+      apt: this.apt(),
+      city: this.city(),
+      state: this.state(),
+      zipCode: this.zipCode()
     };
 
-    console.log('New user:', newUser);
-
-    // TODO: Call your API service here to save the user
-    // Example: this.userService.createUser(newUser).subscribe(...)
-
-    this.resetForm();
-    this.close();
+    this.userService.save(newUser).subscribe({
+      next: (response: UserResponse) => {
+        if (response.success) {
+          console.log('User saved successfully!', response.user);
+          this.resetForm();
+          this.close();
+        } else {
+          console.error('Failed to save user:', response.errors);
+        }
+      },
+      error: (error: any) => {
+        console.error('Error saving user:', error);
+      }
+    });
   }
 }

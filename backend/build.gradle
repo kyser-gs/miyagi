@@ -64,7 +64,7 @@ dependencies {
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
     runtimeOnly "org.fusesource.jansi:jansi"
-    runtimeOnly "com.h2database:h2"
+    runtimeOnly "org.postgresql:postgresql"
     runtimeOnly "com.zaxxer:HikariCP"
     runtimeOnly "cloud.wondrify:asset-pipeline-grails"
     testAndDevelopmentOnly "org.webjars.npm:bootstrap"
