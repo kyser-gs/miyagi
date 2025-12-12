@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {UserResponse, UserService} from '../../../../../services/user.service';
@@ -11,6 +11,7 @@ import {UserResponse, UserService} from '../../../../../services/user.service';
 })
 export class AddNewUserDialogComponent {
   private userService: UserService = inject(UserService);
+  @Output() userCreated = new EventEmitter<void>();
 
   // Form data using signals
   firstName = signal('');
@@ -91,16 +92,12 @@ export class AddNewUserDialogComponent {
     };
 
     this.userService.save(newUser).subscribe({
-      next: (response: UserResponse) => {
-        if (response.success) {
-          console.log('User saved successfully!', response.user);
+      next: () => {
           this.resetForm();
+          this.userCreated.emit();
           this.close();
-        } else {
-          console.error('Failed to save user:', response.errors);
-        }
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Error saving user:', error);
       }
     });

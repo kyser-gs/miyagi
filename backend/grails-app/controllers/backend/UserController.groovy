@@ -4,22 +4,21 @@ import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 
 class UserController {
+    UserService userService;
 
-    @Transactional
     def save() {
-        def user = new User(request.JSON)
-
-        if (user.save()) {
-            render([user: user] as JSON)
+        println "===== SAVE METHOD CALLED ====="
+        println "Request JSON: ${request.JSON}"
+        if (userService.saveUser(request.JSON)) {
+            render([success: true] as JSON)
         } else {
             response.status = 400
-            render([errors: user.errors.allErrors] as JSON)
+            render([success: false] as JSON)
         }
     }
 
     def list() {
-        def users = User.list()
-        render(users as JSON)
+        render(userService.getUsers() as JSON)
     }
 
     def show(Long id) {

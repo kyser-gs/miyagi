@@ -14,8 +14,13 @@ export interface User {
   zipCode: string;
 }
 
+export interface UserViewModel {
+  name: string;
+  dateOfBirth: string;
+  address: string;
+}
+
 export interface UserResponse {
-  success: boolean;
   user?: User;
   errors?: any[];
   message?: string;
@@ -33,8 +38,8 @@ export class UserService {
     return this.http.post<UserResponse>(`${this.apiUrl}/save`, user);
   }
 
-  list(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/list`);
+  list(): Observable<UserViewModel[]> {
+    return this.http.get<UserViewModel[]>(`${this.apiUrl}/list`);
   }
 
   get(id: number): Observable<User> {

@@ -32,8 +32,8 @@ spring:
                 - '*.properties'
 environments:
     development:
-        management:
-            endpoints:
+      management:
+           endpoints:
                 enabled-by-default: true
                 web:
                     base-path: '/actuator'

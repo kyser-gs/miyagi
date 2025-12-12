@@ -2,4 +2,5 @@
   Add New User
 </button>
 
-<add-new-user-dialog />
+<add-new-user-dialog (userCreated)="fetchUsers()"></add-new-user-dialog>
+<users-table [dataSource]="dataSource"/>
