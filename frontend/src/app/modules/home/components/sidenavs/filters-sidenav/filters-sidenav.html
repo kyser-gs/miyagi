@@ -1,0 +1,25 @@
+<div class="filters-sidenav">
+  <h1>Filters</h1>
+  <name-input [(name)]="name"/>
+
+  <mat-form-field class="datepicker">
+    <mat-label>Choose a start date</mat-label>
+    <input matInput [(ngModel)]="startDate" [matDatepicker]="startpicker">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="startpicker"></mat-datepicker-toggle>
+    <mat-datepicker #startpicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="datepicker">
+    <mat-label>Choose an end date</mat-label>
+    <input matInput [(ngModel)]="endDate" [matDatepicker]="endpicker">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="endpicker"></mat-datepicker-toggle>
+    <mat-datepicker #endpicker></mat-datepicker>
+  </mat-form-field>
+
+  <button (click)="submitFilter()" class="apply-filter-button">
+    Submit
+  </button>
+</div>
+

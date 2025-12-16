@@ -1,6 +1,21 @@
-<button (click)="openDialog()" class="add-user-btn">
+<button (click)="openDialog()" class="add-user-button">
   Add New User
 </button>
-
+<mat-drawer-container class="home-content">
+  <mat-drawer class="left-side" mode="side" opened>
+    <filters-sidenav (filterApplied)="onFiltersApplied($event)"></filters-sidenav>
+  </mat-drawer>
+  <mat-drawer class="right-side" position="end" mode="side" [(opened)]="locationNavOpened" >
+    <locations-sidenav (close)="onClose()" [locationDetails]="locationDetails"/>
+  </mat-drawer>
+  <mat-drawer-content>
+    <birth-month-list [monthCounts]="monthCounts" [dataSource]="dataSource"/>
+    <users-table
+      [dataSource]="dataSource"
+      [totalCount]="totalCount"
+      (pageChange)="onPageChange($event)"
+      (userClicked)="onUserClicked($event)"
+    />
+  </mat-drawer-content>
+</mat-drawer-container>
 <add-new-user-dialog (userCreated)="fetchUsers()"></add-new-user-dialog>
-<users-table [dataSource]="dataSource"/>

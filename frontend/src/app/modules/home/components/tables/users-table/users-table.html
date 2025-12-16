@@ -1,39 +1,14 @@
-<table mat-table [dataSource]="dataSource">
+<table mat-table [dataSource]="dataSource()">
   <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-    <th mat-header-cell *matHeaderCellDef>{{column}}</th>
+    <th mat-header-cell *matHeaderCellDef>{{getColumnName(column)}}</th>
     <td mat-cell *matCellDef="let user">{{user[column]}}</td>
   </ng-container>
-<!--  <ng-container matColumnDef="name">-->
-<!--    <th mat-header-cell *matHeaderCellDef>Name</th>-->
-<!--    <td mat-cell *matCellDef="let user">{{user.firstName}} {{user.lastName}}</td>-->
-<!--  </ng-container>-->
-<!--  <ng-container matColumnDef="dob">-->
-<!--    <th mat-header-cell *matHeaderCellDef>Date of Birth</th>-->
-<!--    <td mat-cell *matCellDef="let user">{{user.dateOfBirth}}</td>-->
-<!--  </ng-container>-->
-<!--  <ng-container matColumnDef="address">-->
-<!--    <th mat-header-cell *matHeaderCellDef>Address</th>-->
-<!--    <td mat-cell *matCellDef="let user">{{user.street}}{{user.apt ? ', ' + user.apt : ''}}, {{user.city}}, {{user.state}} {{user.zipCode}}</td>-->
-<!--  </ng-container>-->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let user; columns: displayedColumns;" (click)="onClick(user)"></tr>
 </table>
-@if (dataSource.length === 0){
-  <p class="empty-row">No People Entered</p>
-}
-
-<!--<p>Regular HTML Table</p>-->
-<!--<table>-->
-<!--  <thead>-->
-<!--  <tr>-->
-<!--    <th *ngFor="let columnName of displayedColumns">{{columnName}}</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-<!--  <tbody>-->
-<!--  <tr *ngFor="let user of dataSource">-->
-<!--    <td>{{user.firstName}} {{user.lastName}}</td>-->
-<!--    <td>{{user.dateOfBirth}}</td>-->
-<!--    <td>{{user.street}}{{user.apt ? ', ' + user.apt : ''}}, {{user.city}}, {{user.state}} {{user.zipCode}}</td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
-<!--</table>-->
+<p class="empty-row" *ngIf="isTableEmpty()">No People Entered</p>
+<mat-paginator [length]="totalCount()"
+               [pageSize]="5"
+               (page)="onPageChange($event)"
+               showFirstLastButtons>
+</mat-paginator>

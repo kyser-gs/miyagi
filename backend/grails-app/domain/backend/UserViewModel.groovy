@@ -2,6 +2,6 @@ package backend
 
 class UserViewModel {
     String name
-    Date dateOfBirth
+    String dateOfBirth
     String address
 }
