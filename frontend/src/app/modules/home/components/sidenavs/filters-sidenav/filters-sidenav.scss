@@ -1,0 +1,32 @@
+.filters-sidenav{
+  display: flex;
+  flex-direction: column;
+
+  padding: 1rem 1rem 1rem 0;
+
+  .datepicker{
+    width: 90%;
+  }
+
+  .apply-filter-button{
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 90%;
+
+    &:hover {
+      background-color: #2563eb;
+    }
+
+    &:active {
+      background-color: #1d4ed8;
+    }
+  }
+}

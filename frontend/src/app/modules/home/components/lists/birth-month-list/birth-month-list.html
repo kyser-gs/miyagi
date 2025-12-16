@@ -1,0 +1,12 @@
+<div class="birth-month-list">
+  <div class="month" *ngFor="let month of monthData()"
+       [ngClass]="{
+         'highlight-blue': month.count >= 6,
+         'highlight-red': month.count >= 3 && month.count < 6
+       }">
+    <div class="month-items">
+      <span>{{month.name}}</span>
+      <span>{{month.count}}</span>
+    </div>
+  </div>
+</div>

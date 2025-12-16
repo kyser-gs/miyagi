@@ -1,4 +1,4 @@
-.add-user-btn {
+.add-user-button {
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
   background-color: #3b82f6;
@@ -18,3 +18,15 @@
     background-color: #1d4ed8;
   }
 }
+.home-content{
+  min-height: 30rem;
+
+  .left-side{
+    width: 20%;
+  }
+
+  .right-side{
+    padding-left: 1rem;
+  }
+}
+

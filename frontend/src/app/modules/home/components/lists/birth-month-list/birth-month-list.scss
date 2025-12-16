@@ -1,0 +1,21 @@
+.birth-month-list{
+  display: flex;
+  flex-direction: row;
+
+  .month{
+    padding: 1rem;
+
+    .month-items{
+      display: flex;
+      flex-direction: column;
+    }
+
+    &.highlight-red {
+      color: red;
+    }
+
+    &.highlight-blue {
+      color: blue;
+    }
+  }
+}

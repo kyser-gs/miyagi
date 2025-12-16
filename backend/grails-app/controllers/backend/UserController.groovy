@@ -1,5 +1,6 @@
 package backend
 
+import java.text.SimpleDateFormat
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 
@@ -7,8 +8,6 @@ class UserController {
     UserService userService;
 
     def save() {
-        println "===== SAVE METHOD CALLED ====="
-        println "Request JSON: ${request.JSON}"
         if (userService.saveUser(request.JSON)) {
             render([success: true] as JSON)
         } else {
@@ -18,16 +17,14 @@ class UserController {
     }
 
     def list() {
-        render(userService.getUsers() as JSON)
-    }
+        def sdf = new SimpleDateFormat("yyyy-MM-dd")
 
-    def show(Long id) {
-        def user = User.get(id)
-        if (user) {
-            render(user as JSON)
-        } else {
-            response.status = 404
-            render([message: 'User not found'] as JSON)
-        }
+        def startDate = params.startDate ? sdf.parse(params.startDate) : null
+        def endDate = params.endDate ? sdf.parse(params.endDate) : null
+        def name = params.name ?: null
+        def page = params.page ? params.int('page') : 0
+        def size = params.size ? params.int('size') : 10
+
+        render(userService.getUsers(name, startDate, endDate, page, size) as JSON)
     }
 }

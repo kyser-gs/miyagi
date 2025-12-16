@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
@@ -20,6 +20,12 @@ export interface UserViewModel {
   address: string;
 }
 
+export interface UserListResponse {
+  users: UserViewModel[];
+  total: number;
+  monthCounts: number[];
+}
+
 export interface UserResponse {
   user?: User;
   errors?: any[];
@@ -38,11 +44,22 @@ export class UserService {
     return this.http.post<UserResponse>(`${this.apiUrl}/save`, user);
   }
 
-  list(): Observable<UserViewModel[]> {
-    return this.http.get<UserViewModel[]>(`${this.apiUrl}/list`);
-  }
+  list(name?: string, startDate?: Date, endDate?: Date, page: number = 0, size: number = 10): Observable<UserListResponse> {
+    let params = new HttpParams();
 
-  get(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/show/${id}`);
+    if (name) {
+      params = params.set('name', name);
+    }
+    if (startDate) {
+      params = params.set('startDate', startDate.toISOString().split('T')[0]);
+    }
+    if (endDate) {
+      params = params.set('endDate', endDate.toISOString().split('T')[0]);
+    }
+
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
+
+    return this.http.get<UserListResponse>(`${this.apiUrl}/list`, { params });
   }
 }
