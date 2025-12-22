@@ -10,7 +10,7 @@ import {UserViewModel} from '../../../../../services/user.service';
 })
 export class LocationsSidenav {
   close = output<void>();
-  locationDetails = input<LocationDetails>({name:'', address: '', coordinates: '', distance: 0});
+  locationDetails = input<LocationDetails>({name:'', address: '', coordinates: '', distance: ''});
 
   onClose(){
     this.close.emit()
@@ -21,5 +21,5 @@ export interface LocationDetails {
   name: string;
   address: string;
   coordinates: string;
-  distance: number;
+  distance: string;
 }
