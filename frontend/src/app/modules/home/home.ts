@@ -7,6 +7,9 @@ import { FiltersSidenav, FilterValues } from "./components/sidenavs/filters-side
 import { BirthMonthList } from "./components/lists/birth-month-list/birth-month-list";
 import { PageEvent } from '@angular/material/paginator';
 import {LocationDetails, LocationsSidenav} from "./components/sidenavs/locations-sidenav/locations-sidenav";
+import { environment } from "../../../environments/environment";
+import {GeocodeResponse, LocationService } from "../../services/location.service";
+import { Observable } from "rxjs/internal/Observable";
 
 @Component({
   selector: 'home',
@@ -18,6 +21,7 @@ import {LocationDetails, LocationsSidenav} from "./components/sidenavs/locations
 })
 export class Home {
   private userService: UserService = inject(UserService);
+  private locationService: LocationService = inject(LocationService);
   private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
   dataSource: UserViewModel[] = []
   totalCount: number = 0;
@@ -25,7 +29,8 @@ export class Home {
   currentFilters: FilterValues = {};
   monthCounts: number[] = Array(12).fill(0);
   locationNavOpened: boolean = false;
-  locationDetails: LocationDetails = {name:'', address: '', coordinates: '', distance: 0};
+  locationDetails: LocationDetails = {name:'', address: '', coordinates: '', distance: ''};
+  apiKey = environment.googleMapsApiKey;
 
   dialog = viewChild(AddNewUserDialogComponent);
   usersTable = viewChild(UsersTable);
@@ -60,11 +65,23 @@ export class Home {
   }
 
   onUserClicked(user: UserViewModel){
-    this.locationNavOpened = true;
+    this.locationService.geocode(user.address).subscribe({
+      next: (response) => {
+        const location = response.results[0].geometry.location;
+        this.locationDetails.coordinates = `${location.lat}, ${location.lng}`
+      }
+    })
+
+    this.locationService.distance(user.address).subscribe({
+      next: (response) => {
+        this.locationDetails.distance = response.distance
+      }
+    })
 
     this.locationDetails.name = user.name;
     this.locationDetails.address = user.address;
-    this.locationDetails.coordinates = "Temporary coordinates";
+
+    this.locationNavOpened = true;
   }
 
   onClose(){
