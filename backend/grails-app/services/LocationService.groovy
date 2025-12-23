@@ -13,7 +13,7 @@ class LocationService {
         def connection = url.openConnection() as HttpURLConnection
 
         def responseCode = connection.getResponseCode()
-        
+
         if (responseCode == 200) {
             def response = new JsonSlurper().parseText(connection.inputStream.text)
 
