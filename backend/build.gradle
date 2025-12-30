@@ -73,7 +73,6 @@ dependencies {
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
-    runtimeOnly 'com.github.jsimone:webapp-runner:8.5.11.3'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
