@@ -48,7 +48,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter"
     implementation "org.apache.grails:grails-core"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+//    implementation "org.springframework.boot:spring-boot-starter-tomcat"
     implementation "org.apache.grails:grails-web-boot"
     implementation "org.apache.grails:grails-logging"
     implementation "org.apache.grails:grails-rest-transforms"
@@ -73,6 +73,8 @@ dependencies {
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
+    runtimeOnly 'com.github.jsimone:webapp-runner:8.5.11.3'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 compileJava.options.release = 17
@@ -137,4 +139,3 @@ processResources.dependsOn buildAngular
 
 // Also build Angular before bootRun
 bootRun.dependsOn buildAngular
-
