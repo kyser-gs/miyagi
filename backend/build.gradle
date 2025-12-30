@@ -106,6 +106,11 @@ task buildAngular(type: Exec) {
 
     workingDir '../frontend'
 
+    // Only run if frontend directory exists (skip on Heroku)
+    onlyIf {
+        file('../frontend').exists()
+    }
+
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'npm', 'run', 'build'
     } else {
@@ -119,9 +124,9 @@ task installAngularDependencies(type: Exec) {
 
     workingDir '../frontend'
 
-    // Only run if node_modules doesn't exist
+    // Only run if frontend exists and node_modules doesn't exist
     onlyIf {
-        !file('../frontend/node_modules').exists()
+        file('../frontend').exists() && !file('../frontend/node_modules').exists()
     }
 
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
@@ -134,8 +139,8 @@ task installAngularDependencies(type: Exec) {
 // Make sure Angular dependencies are installed before building
 buildAngular.dependsOn installAngularDependencies
 
-// Build Angular before processing resources
-processResources.dependsOn buildAngular
-
-// Also build Angular before bootRun
-bootRun.dependsOn buildAngular
+// Build Angular before processing resources (only if frontend exists)
+if (file('../frontend').exists()) {
+    processResources.dependsOn buildAngular
+    bootRun.dependsOn buildAngular
+}
