@@ -122,8 +122,8 @@ environments:
             url: jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         dataSource:
-            dbCreate: none
-            url: jdbc:h2:./prodDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            dbCreate: update
+            url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/miyagi_prod}
             properties:
                 jmxEnabled: true
                 initialSize: 5
