@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/backend-0.1.war
+web: java -javaagent:build/datadog/dd-java-agent.jar -Ddd.logs.injection=true -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/backend-0.1.war

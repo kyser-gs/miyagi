@@ -143,3 +143,24 @@ if (file('../frontend').exists()) {
     processResources.dependsOn buildAngular
     bootRun.dependsOn buildAngular
 }
+
+// Datadog APM agent download
+configurations {
+    ddAgent
+}
+
+dependencies {
+    ddAgent 'com.datadoghq:dd-java-agent:1.42.0'
+}
+
+task downloadDDAgent(type: Copy) {
+    description = 'Download Datadog Java agent'
+    group = 'build'
+
+    from configurations.ddAgent
+    into "$buildDir/datadog"
+    rename { 'dd-java-agent.jar' }
+}
+
+// Download DD agent before building WAR
+war.dependsOn downloadDDAgent
