@@ -1,1 +1,6 @@
-web: java -Dserver.port=$PORT $JAVA_TOOL_OPTIONS $JAVA_OPTS -jar build/libs/backend-0.1.war
+web: java -javaagent:/app/.heroku/datadog/dd-java-agent.jar \
+         -Ddd.logs.injection=true \
+         -Dserver.port=$PORT \
+         $JAVA_TOOL_OPTIONS \
+         $JAVA_OPTS \
+         -jar build/libs/backend-0.1.war
