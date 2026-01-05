@@ -3,10 +3,12 @@ package backend
 import java.text.SimpleDateFormat
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
     UserService userService;
 
+    @Secured(['ROLE_USER'])
     def save() {
         if (userService.saveUser(request.JSON)) {
             render([success: true] as JSON)
