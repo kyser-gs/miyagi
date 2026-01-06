@@ -10,11 +10,11 @@ class AccountController {
     AccountService accountService
     SpringSecurityService springSecurityService
 
-    def create() {
+    def signup() {
         def json = request.JSON
 
         try {
-            if (accountService.create(json)) {
+            if (accountService.signup(json)) {
                 render([success: true, username: json.username] as JSON)
             } else {
                 response.status = 400
@@ -32,12 +32,10 @@ class AccountController {
         Account account = accountService.signin(json.username, json.password)
 
         if (account) {
-            // Get authorities from account
             def authorities = account.authorities.collect {
                 new SimpleGrantedAuthority(it.authority)
             }
 
-            // Create authentication token and set it in the security context
             def authToken = new UsernamePasswordAuthenticationToken(
                 account.username,
                 null,
@@ -45,7 +43,6 @@ class AccountController {
             )
             SecurityContextHolder.context.authentication = authToken
 
-            // Save the security context in the session
             session.setAttribute('SPRING_SECURITY_CONTEXT', SecurityContextHolder.context)
 
             render([success: true, username: account.username] as JSON)

@@ -62,9 +62,6 @@ dependencies {
     implementation "org.apache.grails:grails-data-hibernate5"
     implementation "org.apache.grails:grails-gsp"
     implementation "org.apache.grails:grails-spring-security:7.0.0"
-    implementation "io.jsonwebtoken:jjwt-api:0.11.5"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:0.11.5"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.11.5"
     implementation "org.springframework.security:spring-security-crypto"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"

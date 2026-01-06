@@ -1,7 +1,6 @@
 package backend
 
 class BootStrap {
-
     def init = {
     }
 

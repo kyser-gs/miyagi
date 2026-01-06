@@ -13,7 +13,6 @@ export class AddNewUserDialogComponent {
   private userService: UserService = inject(UserService);
   @Output() userCreated = new EventEmitter<void>();
 
-  // Form data using signals
   firstName = signal('');
   lastName = signal('');
   dateOfBirth = signal('');

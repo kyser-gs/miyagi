@@ -101,39 +101,10 @@ grails:
 grails:
     plugin:
         springsecurity:
-            userLookup:
-                userDomainClassName: backend.Account
-                authorityJoinClassName: backend.AccountRole
-            authority:
-                className: backend.Role
-            controllerAnnotations:
-                staticRules:
-                    - pattern: '/api/account/create'
-                      access: ['permitAll']
-                    - pattern: '/api/account/signin'
-                      access: ['permitAll']
-                    - pattern: '/api/account/signout'
-                      access: ['permitAll']
-                    - pattern: '/actuator/**'
-                      access: ['permitAll']
-                    - pattern: '/**'
-                      access: ['permitAll']
-            rest:
-                token:
-                    storage:
-                        useSession: true
-            filterChain:
-                chainMap:
-                    - pattern: '/assets/**'
-                      filters: 'none'
-                    - pattern: '/**/js/**'
-                      filters: 'none'
-                    - pattern: '/**/css/**'
-                      filters: 'none'
-                    - pattern: '/**/images/**'
-                      filters: 'none'
-                    - pattern: '/**'
-                      filters: 'JOINED_FILTERS'
+            securityConfigType: Annotation
+            rejectIfNoRule: false
+            fii:
+                rejectPublicInvocations: false
 
 ---
 hibernate:

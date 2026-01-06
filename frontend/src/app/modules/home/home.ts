@@ -10,11 +10,14 @@ import {LocationDetails, LocationsSidenav} from "./components/sidenavs/locations
 import { environment } from "../../../environments/environment";
 import {GeocodeResponse, LocationService } from "../../services/location.service";
 import { Observable } from "rxjs/internal/Observable";
+import {SignInDialog} from './components/dialogs/sign-in-dialog/sign-in-dialog';
+import {SignUpDialog} from './components/dialogs/sign-up-dialog/sign-up-dialog';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'home',
   imports: [
-    AddNewUserDialogComponent, UsersTable, MatSidenavModule, FiltersSidenav, BirthMonthList, LocationsSidenav
+    AddNewUserDialogComponent, UsersTable, MatSidenavModule, FiltersSidenav, BirthMonthList, LocationsSidenav, SignInDialog, SignUpDialog
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -22,6 +25,7 @@ import { Observable } from "rxjs/internal/Observable";
 export class Home {
   private userService: UserService = inject(UserService);
   private locationService: LocationService = inject(LocationService);
+  private authService: AuthService = inject(AuthService);
   private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
   dataSource: UserViewModel[] = []
   totalCount: number = 0;
@@ -32,11 +36,42 @@ export class Home {
   locationDetails: LocationDetails = {name:'', address: '', coordinates: '', distance: ''};
   apiKey = environment.googleMapsApiKey;
 
-  dialog = viewChild(AddNewUserDialogComponent);
+  newUserDialog = viewChild(AddNewUserDialogComponent);
   usersTable = viewChild(UsersTable);
+  signInDialog = viewChild(SignInDialog)
+  signUpDialog = viewChild(SignUpDialog)
 
-  openDialog() {
-    this.dialog()?.open();
+  openNewUserDialog() {
+    if (!this.authService.isLoggedIn()) {
+      this.openSignInDialog();
+      console.log("Not logged in")
+      return;
+    }
+    this.newUserDialog()?.open();
+  }
+
+  openSignInDialog() {
+    this.signInDialog()?.open();
+  }
+
+  openSignUpDialog() {
+    this.signUpDialog()?.open();
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  signOut() {
+    this.authService.signOut().subscribe({
+      next: () => {
+        this.authService.setAuthenticated(false);
+        console.log('Signed out successfully');
+      },
+      error: (error) => {
+        console.error('Error signing out:', error);
+      }
+    });
   }
 
   ngOnInit() {
