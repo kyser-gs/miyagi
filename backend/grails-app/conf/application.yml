@@ -98,6 +98,15 @@ grails:
                 staticparts: none
 
 ---
+grails:
+    plugin:
+        springsecurity:
+            securityConfigType: Annotation
+            rejectIfNoRule: false
+            fii:
+                rejectPublicInvocations: false
+
+---
 hibernate:
     cache:
         queries: false

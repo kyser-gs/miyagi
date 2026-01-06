@@ -1,6 +1,22 @@
-<button (click)="openDialog()" class="add-user-button">
-  Add New User
-</button>
+<div class="page-buttons">
+  <button (click)="openNewUserDialog()" class="user-button">
+    Add New User
+  </button>
+  <div class="right-side-buttons">
+    @if (isLoggedIn()) {
+      <button (click)="signOut()" class="user-button">
+        Sign Out
+      </button>
+    } @else {
+      <button (click)="openSignInDialog()" class="user-button">
+        Sign in
+      </button>
+      <button (click)="openSignUpDialog()" class="user-button">
+        Sign up
+      </button>
+    }
+  </div>
+</div>
 <mat-drawer-container class="home-content">
   <mat-drawer class="left-side" mode="side" opened>
     <filters-sidenav (filterApplied)="onFiltersApplied($event)"></filters-sidenav>
@@ -19,3 +35,5 @@
   </mat-drawer-content>
 </mat-drawer-container>
 <add-new-user-dialog (userCreated)="fetchUsers()"></add-new-user-dialog>
+<sign-in-dialog></sign-in-dialog>
+<sign-up-dialog></sign-up-dialog>

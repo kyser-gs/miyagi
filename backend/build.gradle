@@ -48,7 +48,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter"
     implementation "org.apache.grails:grails-core"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-//    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
     implementation "org.apache.grails:grails-web-boot"
     implementation "org.apache.grails:grails-logging"
     implementation "org.apache.grails:grails-rest-transforms"
@@ -61,6 +61,8 @@ dependencies {
     implementation "org.webjars:webjars-locator-core"
     implementation "org.apache.grails:grails-data-hibernate5"
     implementation "org.apache.grails:grails-gsp"
+    implementation "org.apache.grails:grails-spring-security:7.0.0"
+    implementation "org.springframework.security:spring-security-crypto"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
     runtimeOnly "org.fusesource.jansi:jansi"
@@ -73,7 +75,6 @@ dependencies {
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 compileJava.options.release = 17
