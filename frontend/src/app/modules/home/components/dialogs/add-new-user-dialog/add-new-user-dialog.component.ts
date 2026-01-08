@@ -93,8 +93,11 @@ export class AddNewUserDialogComponent {
     this.userService.save(newUser).subscribe({
       next: () => {
           this.resetForm();
-          this.userCreated.emit();
           this.close();
+          // Delay to allow RabbitMQ consumer to index to Elasticsearch
+          setTimeout(() => {
+            this.userCreated.emit();
+          }, 1000);
       },
       error: (error) => {
         console.error('Error saving user:', error);

@@ -6,11 +6,22 @@ import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
-    UserService userService;
+    UserService userService
+    ProducerService producerService
 
     @Secured(['ROLE_USER'])
     def save() {
-        if (userService.saveUser(request.JSON)) {
+        def user = userService.saveUser(request.JSON)
+
+        if (user) {
+            // Send message to RabbitMQ for async Elasticsearch indexing
+            try {
+                producerService.sendMessage(user.id.toString())
+                println "Published message to index user ${user.id}"
+            } catch (Exception e) {
+                println "Failed to publish user indexing message: ${e.message}"
+            }
+
             render([success: true] as JSON)
         } else {
             response.status = 400

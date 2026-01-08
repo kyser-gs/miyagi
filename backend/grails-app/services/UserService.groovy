@@ -39,12 +39,11 @@ class UserService {
     def saveUser(request) {
         def user = new User(request)
 
-        if (user.save()){
-            elasticService.indexUser(user)
-            return true
+        if (user.save(flush: true)){
+            return user
         }
         else{
-            return false
+            return null
         }
     }
 }
