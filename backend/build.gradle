@@ -75,6 +75,7 @@ dependencies {
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
+    implementation "org.springframework.boot:spring-boot-starter-amqp"
 }
 
 compileJava.options.release = 17
