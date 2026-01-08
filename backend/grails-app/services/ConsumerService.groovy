@@ -15,8 +15,6 @@ class ConsumerService {
     @Transactional
     @RabbitListener(queues = '#{T(backend.config.RabbitMQConfig).QUEUE_NAME}')
     def receiveMessage(@Payload String userId, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) {
-        println "Received message to index user: ${userId}"
-
         try {
             def user = User.get(userId as Long)
             if (user) {
@@ -30,9 +28,9 @@ class ConsumerService {
             println "Message acknowledged for user ${userId}"
         } catch (Exception e) {
             println "Failed to process message: ${e.message}"
+            println "Message rejected and requeued for user ${userId}"
 
             channel.basicNack(deliveryTag, false, true)
-            println "Message rejected and requeued for user ${userId}"
         }
     }
 }

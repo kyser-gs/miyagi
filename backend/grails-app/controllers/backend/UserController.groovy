@@ -14,7 +14,6 @@ class UserController {
         def user = userService.saveUser(request.JSON)
 
         if (user) {
-            // Send message to RabbitMQ for async Elasticsearch indexing
             try {
                 producerService.sendMessage(user.id.toString())
                 println "Published message to index user ${user.id}"
@@ -24,7 +23,6 @@ class UserController {
 
             render([success: true] as JSON)
         } else {
-            response.status = 400
             render([success: false] as JSON)
         }
     }

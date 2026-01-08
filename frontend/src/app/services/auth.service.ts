@@ -17,30 +17,40 @@ export interface SignInResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticated = signal(false);
-
   constructor(private http: HttpClient) {}
 
+  private apiUrl = '/api/account';
+  private isAuthenticated = signal(this.checkAuthState());
+
+  private checkAuthState(): boolean {
+    return localStorage.getItem('isAuthenticated') === 'true';
+  }
+
   signIn(username: string, password: string): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>('/api/account/signin', {
+    return this.http.post<SignInResponse>(`${this.apiUrl}/signin`, {
       username,
       password
     });
   }
 
   signUp(username: string, password: string): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>('/api/account/signup', {
+    return this.http.post<SignInResponse>(`${this.apiUrl}/signup`, {
       username,
       password
     });
   }
 
   signOut(): Observable<any> {
-    return this.http.post('/api/account/signout', {});
+    return this.http.post(`${this.apiUrl}/signout`, {});
   }
 
   setAuthenticated(authenticated: boolean) {
     this.isAuthenticated.set(authenticated);
+    if (authenticated) {
+      localStorage.setItem('isAuthenticated', 'true');
+    } else {
+      localStorage.removeItem('isAuthenticated');
+    }
   }
 
   isLoggedIn() {

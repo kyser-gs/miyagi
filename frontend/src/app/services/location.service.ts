@@ -29,13 +29,10 @@ export interface DistanceMatrixResponse{
   providedIn: 'root'
 })
 export class LocationService {
-  private baseUrl = 'https://maps.googleapis.com/maps/api/';
-  private apiUrl = '/api/location';
-
   constructor(private http: HttpClient) {}
 
   geocode(address: string): Observable<GeocodeResponse> {
-    return this.http.get<GeocodeResponse>(`${this.baseUrl}geocode/json`, {
+    return this.http.get<GeocodeResponse>("https://maps.googleapis.com/maps/api/geocode/json", {
       params: {
         address: address,
         key: environment.googleMapsApiKey
@@ -44,7 +41,7 @@ export class LocationService {
   }
 
   distance(address: string): Observable<{distance: string}> {
-    return this.http.get<{distance: string}>(`${this.apiUrl}/distance`, {
+    return this.http.get<{distance: string}>("/api/location/distance", {
       params: {
         destinations: address,
         origins: "1901 L St NW, Washington, D.C., 20036",

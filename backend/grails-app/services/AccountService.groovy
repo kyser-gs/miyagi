@@ -2,6 +2,9 @@ package backend
 
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.SpringSecurityService
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 class AccountService {
     SpringSecurityService springSecurityService
@@ -12,7 +15,7 @@ class AccountService {
         account.password = springSecurityService.encodePassword(account.password)
 
         if (!account.save()) {
-            return false
+            throw new RuntimeException("Failed to create account")
         }
 
         def userRole = Role.findByAuthority('ROLE_USER')
@@ -25,17 +28,31 @@ class AccountService {
         return true
     }
 
-    def signin(String username, String password){
+    def signin(String username, String password, session) {
         Account account = Account.findByUsername(username)
 
-        if (!account){
-            return false
+        if (!account) {
+            throw new RuntimeException("Invalid credentials")
         }
 
-        if (springSecurityService.passwordEncoder.matches(password, account.password)) {
-            return account
+        if (!springSecurityService.passwordEncoder.matches(password, account.password)) {
+            throw new RuntimeException("Invalid credentials")
         }
 
-        return null
+        // Set up Spring Security authentication
+        def authorities = account.authorities.collect {
+            new SimpleGrantedAuthority(it.authority)
+        }
+
+        def authToken = new UsernamePasswordAuthenticationToken(
+            account.username,
+            null,
+            authorities
+        )
+        SecurityContextHolder.context.authentication = authToken
+
+        session.setAttribute('SPRING_SECURITY_CONTEXT', SecurityContextHolder.context)
+
+        return account
     }
 }

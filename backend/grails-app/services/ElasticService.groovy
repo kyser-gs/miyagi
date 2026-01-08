@@ -68,7 +68,6 @@ class ElasticService {
             ]
         }
 
-
         if (startDate || endDate) {
             def rangeQuery = [:]
             if (startDate) rangeQuery.gte = sdf.format(startDate)

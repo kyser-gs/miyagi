@@ -2,7 +2,7 @@
 <div class="dialog-overlay" (click)="close()">
   <div class="dialog-container" (click)="$event.stopPropagation()">
     <div class="dialog-header">
-      <h2>Sign In</h2>
+      <h2>{{ title() }}</h2>
       <button class="close-btn" (click)="close()" aria-label="Close dialog">
         X
       </button>
@@ -45,7 +45,7 @@
             class="btn btn-primary"
             [disabled]="!isFormValid() || isLoading()"
           >
-            {{ isLoading() ? 'Signing In...' : 'Sign In' }}
+            {{ submitButtonText() }}
           </button>
         </div>
       </form>

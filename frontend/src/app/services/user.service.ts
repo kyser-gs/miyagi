@@ -26,22 +26,16 @@ export interface UserListResponse {
   monthCounts: number[];
 }
 
-export interface UserResponse {
-  user?: User;
-  errors?: any[];
-  message?: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = '/api/user';
-
   constructor(private http: HttpClient) {}
 
-  save(user: User): Observable<UserResponse> {
-    return this.http.post<UserResponse>(`${this.apiUrl}/save`, user);
+  private apiUrl = '/api/user';
+
+  save(user: User): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/save`, user);
   }
 
   list(name?: string, startDate?: Date, endDate?: Date, page: number = 0, size: number = 10): Observable<UserListResponse> {
