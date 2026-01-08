@@ -9,15 +9,14 @@ import { PageEvent } from '@angular/material/paginator';
 import {LocationDetails, LocationsSidenav} from "./components/sidenavs/locations-sidenav/locations-sidenav";
 import { environment } from "../../../environments/environment";
 import {GeocodeResponse, LocationService } from "../../services/location.service";
-import { Observable } from "rxjs/internal/Observable";
-import {SignInDialog} from './components/dialogs/sign-in-dialog/sign-in-dialog';
-import {SignUpDialog} from './components/dialogs/sign-up-dialog/sign-up-dialog';
+import { Observable, forkJoin } from "rxjs";
+import {AuthDialog} from './components/dialogs/auth-dialog/auth-dialog';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'home',
   imports: [
-    AddNewUserDialogComponent, UsersTable, MatSidenavModule, FiltersSidenav, BirthMonthList, LocationsSidenav, SignInDialog, SignUpDialog
+    AddNewUserDialogComponent, UsersTable, MatSidenavModule, FiltersSidenav, BirthMonthList, LocationsSidenav, AuthDialog
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -27,19 +26,20 @@ export class Home {
   private locationService: LocationService = inject(LocationService);
   private authService: AuthService = inject(AuthService);
   private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
+
   dataSource: UserViewModel[] = []
   totalCount: number = 0;
   pageSize: number = 10;
   currentFilters: FilterValues = {};
   monthCounts: number[] = Array(12).fill(0);
   locationNavOpened: boolean = false;
-  locationDetails: LocationDetails = {name:'', address: '', coordinates: '', distance: ''};
+  locationDetails: LocationDetails = {name: '', address: '', coordinates: '', distance: ''};
   apiKey = environment.googleMapsApiKey;
 
   newUserDialog = viewChild(AddNewUserDialogComponent);
   usersTable = viewChild(UsersTable);
-  signInDialog = viewChild(SignInDialog)
-  signUpDialog = viewChild(SignUpDialog)
+  signInDialog = viewChild('signInDialog', { read: AuthDialog })
+  signUpDialog = viewChild('signUpDialog', { read: AuthDialog })
 
   openNewUserDialog() {
     if (!this.authService.isLoggedIn()) {
@@ -80,7 +80,6 @@ export class Home {
 
   onFiltersApplied(filters: FilterValues) {
     this.currentFilters = filters;
-    // Reset paginator to page 0
     const paginator = this.usersTable()?.paginator();
     if (paginator) {
       paginator.pageIndex = 0;
@@ -99,27 +98,27 @@ export class Home {
     );
   }
 
+  // open the sidenav and display coordinate/location details
   onUserClicked(user: UserViewModel){
-    this.locationService.geocode(user.address).subscribe({
-      next: (response) => {
-        const location = response.results[0].geometry.location;
-        this.locationDetails.coordinates = `${location.lat}, ${location.lng}`
+    forkJoin({
+      geocode: this.locationService.geocode(user.address),
+      distance: this.locationService.distance(user.address)
+    }).subscribe({
+      next: (results) => {
+        const coordinates = results.geocode.results[0].geometry.location;
+
+        this.locationDetails.distance = results.distance.distance;
+        this.locationDetails.coordinates = `${coordinates.lat}, ${coordinates.lng}`;
+        this.locationDetails.name = user.name;
+        this.locationDetails.address = user.address;
+
+        this.locationNavOpened = true;
+        this.changeDetectorRef.detectChanges();
       }
     })
-
-    this.locationService.distance(user.address).subscribe({
-      next: (response) => {
-        this.locationDetails.distance = response.distance
-      }
-    })
-
-    this.locationDetails.name = user.name;
-    this.locationDetails.address = user.address;
-
-    this.locationNavOpened = true;
   }
 
-  onClose(){
+  onCloseLocationNav(){
     this.locationNavOpened = false;
   }
 

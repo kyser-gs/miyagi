@@ -7,11 +7,11 @@ class UserService {
     ElasticService elasticService
 
     def getUsers(String name = null, Date startDate = null, Date endDate = null, int page = 0, int size = 10) {
-        def searchResponse = elasticService.searchUsers(name, startDate, endDate, page, size)
+        def searchResponse = elasticService.searchUsers(name, startDate, endDate, page, size).hits
 
-        def total = searchResponse.hits.total.value
+        def total = searchResponse.total.value
 
-        def users = searchResponse.hits.hits.collect {
+        def users = searchResponse.hits.collect {
             hit -> new UserViewModel(
                     name: hit._source.fullName,
                     dateOfBirth: hit._source.dateOfBirth,

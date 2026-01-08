@@ -76,6 +76,7 @@ dependencies {
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
     implementation "org.springframework.boot:spring-boot-starter-amqp"
+    implementation "org.springframework.session:spring-session-jdbc"
 }
 
 compileJava.options.release = 17

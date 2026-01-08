@@ -1,7 +1,7 @@
 import { Component, signal, computed, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {UserResponse, UserService} from '../../../../../services/user.service';
+import { UserService} from '../../../../../services/user.service';
 
 @Component({
   selector: 'add-new-user-dialog',
@@ -22,7 +22,6 @@ export class AddNewUserDialogComponent {
   state = signal('');
   zipCode = signal('');
 
-  // Dialog state
   isOpen = signal(false);
 
   maxDate = computed(() => {
@@ -30,7 +29,6 @@ export class AddNewUserDialogComponent {
     return today.toISOString().split('T')[0];
   });
 
-  // Validation computed signals
   isZipCodeValid = computed(() => {
     const zip = this.zipCode().trim();
     return zip === '' || /^\d{5}$/.test(zip);

@@ -150,6 +150,16 @@ environments:
                 listener:
                     simple:
                         acknowledge-mode: manual
+            session:
+                store-type: jdbc
+                timeout: 30m
+        server:
+            servlet:
+                session:
+                    cookie:
+                        secure: true
+                        http-only: true
+                        same-site: lax
         dataSource:
             dbCreate: update
             url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/miyagi_prod}

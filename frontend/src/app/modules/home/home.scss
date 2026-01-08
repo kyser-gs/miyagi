@@ -4,6 +4,7 @@
 }
 .home-content{
   min-height: 30rem;
+  min-width: fit-content;
 
   .left-side{
     width: 20%;
@@ -33,4 +34,8 @@
     &:active {
       background-color: #1d4ed8;
     }
+  }
+
+.sign-in-button{
+    margin-right: 0.5rem
   }

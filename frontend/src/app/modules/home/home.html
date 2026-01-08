@@ -8,7 +8,7 @@
         Sign Out
       </button>
     } @else {
-      <button (click)="openSignInDialog()" class="user-button">
+      <button (click)="openSignInDialog()" class="user-button sign-in-button">
         Sign in
       </button>
       <button (click)="openSignUpDialog()" class="user-button">
@@ -22,7 +22,7 @@
     <filters-sidenav (filterApplied)="onFiltersApplied($event)"></filters-sidenav>
   </mat-drawer>
   <mat-drawer class="right-side" position="end" mode="side" [(opened)]="locationNavOpened" >
-    <locations-sidenav (close)="onClose()" [locationDetails]="locationDetails"/>
+    <locations-sidenav (close)="onCloseLocationNav()" [locationDetails]="locationDetails"/>
   </mat-drawer>
   <mat-drawer-content>
     <birth-month-list [monthCounts]="monthCounts" [dataSource]="dataSource"/>
@@ -35,5 +35,5 @@
   </mat-drawer-content>
 </mat-drawer-container>
 <add-new-user-dialog (userCreated)="fetchUsers()"></add-new-user-dialog>
-<sign-in-dialog></sign-in-dialog>
-<sign-up-dialog></sign-up-dialog>
+<auth-dialog #signInDialog [isSignUp]="false"></auth-dialog>
+<auth-dialog #signUpDialog [isSignUp]="true"></auth-dialog>
