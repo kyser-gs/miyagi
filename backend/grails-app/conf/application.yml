@@ -146,10 +146,10 @@ environments:
     production:
         spring:
             rabbitmq:
-                host: ${RABBITMQ_HOST:localhost}
-                port: ${RABBITMQ_PORT:5672}
-                username: ${RABBITMQ_USERNAME:guest}
-                password: ${RABBITMQ_PASSWORD:guest}
+                addresses: ${CLOUDAMQP_URL:amqp://guest:guest@localhost:5672}
+                listener:
+                    simple:
+                        acknowledge-mode: manual
         dataSource:
             dbCreate: update
             url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/miyagi_prod}
