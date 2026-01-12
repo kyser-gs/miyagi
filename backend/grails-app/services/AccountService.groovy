@@ -10,7 +10,7 @@ class AccountService {
     SpringSecurityService springSecurityService
 
     @Transactional // fetch or create pattern
-    def signup(request, session) { // type safety.
+    def signup(request, session) { // type safety and deconstruct request
         def account = new Account(request)
         account.password = springSecurityService.encodePassword(account.password)
 
@@ -25,7 +25,6 @@ class AccountService {
 
         new AccountRole(account: account, role: userRole).save(flush: true)
 
-        // Automatically authenticate the user after successful signup
         def authorities = account.authorities.collect {
             new SimpleGrantedAuthority(it.authority)
         }
