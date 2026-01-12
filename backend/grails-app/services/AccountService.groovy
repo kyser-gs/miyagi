@@ -9,8 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 class AccountService {
     SpringSecurityService springSecurityService
 
-    @Transactional
-    def signup(request) {
+    @Transactional // fetch or create pattern
+    def signup(request, session) { // type safety.
         def account = new Account(request)
         account.password = springSecurityService.encodePassword(account.password)
 
@@ -25,10 +25,23 @@ class AccountService {
 
         new AccountRole(account: account, role: userRole).save(flush: true)
 
+        // Automatically authenticate the user after successful signup
+        def authorities = account.authorities.collect {
+            new SimpleGrantedAuthority(it.authority)
+        }
+
+        def authToken = new UsernamePasswordAuthenticationToken(
+            account.username,
+            null,
+            authorities
+        )
+        SecurityContextHolder.context.authentication = authToken
+        session.setAttribute('SPRING_SECURITY_CONTEXT', SecurityContextHolder.context)
+
         return true
     }
 
-    def signin(String username, String password, session) {
+    def signin(String username, String password, session) { // b crypt one way hashing
         Account account = Account.findByUsername(username)
 
         if (!account) {

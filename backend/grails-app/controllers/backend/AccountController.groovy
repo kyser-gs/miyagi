@@ -8,11 +8,11 @@ class AccountController {
     AccountService accountService
     SpringSecurityService springSecurityService
 
-    def signup() {
+    def signup() { // validating the request + destructuring/unpacking the request
         def json = request.JSON
 
         try {
-            if (accountService.signup(json)) {
+            if (accountService.signup(json, session)) {
                 render([success: true, username: json.username] as JSON)
             }
         } catch (Exception e) {
